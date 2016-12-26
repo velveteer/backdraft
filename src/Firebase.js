@@ -8,7 +8,7 @@ exports.appInit = function (config) {
   return function () {
     return firebase.initializeApp(config);
   };
-}
+};
 
 exports.getCurrentUserImpl = function (just) {
   return function (nothing) {
@@ -23,7 +23,7 @@ exports.getCurrentUserImpl = function (just) {
       };
     };
   };
-}
+};
 
 exports.onAuthStateChangedImpl = function (just) {
   return function (nothing) {
@@ -41,11 +41,11 @@ exports.onAuthStateChangedImpl = function (just) {
       };
     };
   };
-}
+};
 
 exports.googleAuthProvider = function () {
   return new auth.GoogleAuthProvider();
-}
+};
 
 exports.signInWithRedirect = function (app) {
   return function (provider) {
@@ -53,7 +53,7 @@ exports.signInWithRedirect = function (app) {
       app.auth().signInWithRedirect(provider);
     };
   };
-}
+};
 
 exports.signInWithPopup = function (app) {
   return function (provider) {
@@ -61,10 +61,71 @@ exports.signInWithPopup = function (app) {
       app.auth().signInWithPopup(provider);
     };
   };
-}
+};
 
 exports.signOut = function (app) {
   return function () {
     app.auth().signOut();
   };
+};
+
+// Database and Reference API
+
+exports.getDatabase = function (app) {
+  return function () {
+    return app.database();
+  };
+};
+
+exports.getRootRef = function (database) {
+  return function () {
+    return database.ref();
+  };
+};
+
+exports.ref = function (database) {
+  return function (path) {
+    return function () {
+      return database.ref();
+    };
+  };
 }
+
+exports.child = function (path) {
+  return function (ref) {
+    return function () {
+      return ref.child(path);
+    };
+  };
+};
+
+exports.onImpl = function (ref) {
+  return function (cb) {
+    return function (eb) {
+      return function () {
+        var callback = function (value) {
+          cb(value)();
+        };
+        var error = function (err) {
+          eb(err)();
+        };
+        return ref.on('value', callback, error);
+      };
+    };
+  };
+};
+
+// Utilities
+exports.firebaseErrToString = function(fberr) {
+  var message = fberr.message + "\n | firebase code: | \n " + fberr.code;
+  if(fberr.details) // abuse truthyness of null and undefined
+    message += "\n | details | \n" | fberr.details;
+  return message;
+};
+
+exports.firebaseErrToError = function(fberr) {
+  var message = fberr.message + "\n | firebase code: | \n " + fberr.code;
+  if(fberr.details) // abuse truthyness of null and undefined
+    message += "\n | details | \n" | fberr.details;
+  return new Error(message);
+};

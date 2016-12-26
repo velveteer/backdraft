@@ -29,12 +29,14 @@ component = H.parentComponent { initialState, render, eval }
 
   initialState = NotAuthenticated
 
+  -- Render Home screen if authenticated, otherwise render Login screen
   render :: State -> H.ParentHTML Query ChildQuery ChildSlot m
   render NotAuthenticated = HH.slot' CP.cp1 unit (defer \_ -> L.component) (HE.input HandleLogin)
   render Authenticated = HH.slot' CP.cp2 unit (defer \_ -> Home.component) (HE.input HandleHome)
 
   eval :: Query ~> H.ParentDSL State Query ChildQuery ChildSlot Output m
   eval = case _ of
+
     -- Queries
     ToggleSession (Just u) next -> do
       H.put Authenticated

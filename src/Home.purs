@@ -29,4 +29,3 @@ component = H.component { initialState, render, eval }
   eval (Logout next) = do
     H.raise LoggingOut
     pure next
-

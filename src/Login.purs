@@ -30,6 +30,3 @@ component = H.component { initialState, render, eval }
     Login next -> do
       H.raise LoggingIn
       pure next
-
-
-

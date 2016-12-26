@@ -21,5 +21,6 @@ npm run watch
 - [x] Authentication flow (only Google profile at the moment)
 - [ ] Authorization
 - [ ] Database interaction
-- [ ] Better error handling
+- [ ] Routing
+- [ ] Global error handling
 - [ ] Better tooling
