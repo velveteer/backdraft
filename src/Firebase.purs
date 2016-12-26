@@ -16,6 +16,7 @@ module Firebase
 , FirebaseConfig
 , Provider
 , Database
+, DataSnapshot
 , Ref
 , User
 ) where
@@ -24,24 +25,16 @@ import Prelude
 import Control.Monad.Aff (Aff(), makeAff)
 import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Exception (Error())
-import Data.Foreign (Foreign())
 import Data.Generic (class Generic, gShow)
 import Data.Maybe (Maybe(..))
 
--- Kinds
-foreign import data FIREBASE :: !
-foreign import data Firebase :: *
-foreign import data FirebaseErr :: *
-
--- Error helpers
-foreign import firebaseErrToString :: FirebaseErr -> String
-foreign import firebaseErrToError :: FirebaseErr -> Error
-
-instance showFirebaseErr :: Show FirebaseErr where
-    show err = firebaseErrToString err
-
-instance eqFirebaseErr :: Eq FirebaseErr where
-    eq e1 e2 = (firebaseErrToString e1) == (firebaseErrToString e2)
+-- Foreign data
+foreign import data FIREBASE      :: ! -- Effects -- most methods
+foreign import data Firebase      :: * -- firebase.App
+foreign import data Provider      :: * -- firebase.auth.AuthProvider
+foreign import data Database      :: * -- firebase.database.Database
+foreign import data Ref           :: * -- firebase.database.Reference
+foreign import data DataSnapshot  :: *  -- firebase.database.DataSnapshot
 
 -- Initialize
 newtype FirebaseConfig =
@@ -61,7 +54,6 @@ mkConfig r = FirebaseConfig r
 foreign import appInit :: forall eff. FirebaseConfig -> Eff ( firebase :: FIREBASE | eff ) Firebase
 
 -- Auth
-type Provider = Foreign
 newtype User = User { displayName :: String
                     , email :: String
                     , photoURL :: String
@@ -96,10 +88,6 @@ foreign import signInWithPopup :: forall eff. Firebase -> Provider -> Eff ( fire
 foreign import signOut :: forall eff. Firebase -> Eff ( firebase :: FIREBASE | eff ) Unit
 
 -- Database and References
-type Database = Foreign
-type Ref = Foreign
-type DataSnapshot = Foreign
-
 foreign import getDatabase :: forall eff. Firebase -> Eff ( firebase :: FIREBASE | eff ) Database
 foreign import getRootRef :: forall eff. Database -> Eff ( firebase :: FIREBASE | eff ) Ref
 foreign import ref :: forall eff. String -> Database -> Eff ( firebase :: FIREBASE | eff ) Ref
@@ -109,11 +97,11 @@ foreign import onImpl
   :: forall eff
    . Ref
   -> (DataSnapshot -> Eff ( firebase :: FIREBASE | eff ) Unit)
-  -> (FirebaseErr -> Eff ( firebase :: FIREBASE | eff ) Unit)
+  -> (Error -> Eff ( firebase :: FIREBASE | eff ) Unit)
   -> Eff ( firebase :: FIREBASE | eff ) Unit
 
 on
   :: forall eff
    . Ref
   -> Aff (firebase :: FIREBASE | eff) DataSnapshot
-on r = makeAff (\eb cb -> onImpl r cb (eb <<< firebaseErrToError))
+on r = makeAff (\eb cb -> onImpl r cb eb)

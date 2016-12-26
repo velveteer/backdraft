@@ -66,7 +66,7 @@ main = HA.runHalogenAff do
   liftEff $ getDatabase app
     >>= getRootRef
       >>= child "test"
-        >>= (\r -> runAff (const (pure unit)) (\n -> traceAnyA n) $ on r)
+        >>= (\r -> runAff (\e -> traceAnyA e) (\n -> traceAnyA n) $ on r)
 
   -- Consume auth state changes and trigger effects
   io.subscribe $ CR.consumer \msg -> do
