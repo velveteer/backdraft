@@ -29,14 +29,18 @@ exports.onAuthStateChangedImpl = function (just) {
   return function (nothing) {
     return function (app) {
       return function (callback) {
-        return function () {
-          return app.auth().onAuthStateChanged(function (user) {
-            if (user) {
-              return callback(just(user))();
-            } else {
-              return callback(nothing)();
-            }
-          });
+        return function (errback) {
+          return function () {
+            return app.auth().onAuthStateChanged(function (user) {
+              if (user) {
+                return callback(just(user))();
+              } else {
+                return callback(nothing)();
+              }
+            }, function (err) {
+              return errback(err)();
+            });
+          };
         };
       };
     };
@@ -113,19 +117,4 @@ exports.onImpl = function (ref) {
       };
     };
   };
-};
-
-// Utilities
-exports.firebaseErrToString = function(fberr) {
-  var message = fberr.message + "\n | firebase code: | \n " + fberr.code;
-  if(fberr.details) // abuse truthyness of null and undefined
-    message += "\n | details | \n" | fberr.details;
-  return message;
-};
-
-exports.firebaseErrToError = function(fberr) {
-  var message = fberr.message + "\n | firebase code: | \n " + fberr.code;
-  if(fberr.details) // abuse truthyness of null and undefined
-    message += "\n | details | \n" | fberr.details;
-  return new Error(message);
 };

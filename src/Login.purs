@@ -1,17 +1,24 @@
 module Login where
 
 import Prelude
+import Control.Monad.Trans.Class (lift)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 
-type State = Boolean
-data QueryL a = Login a
-data Output = LoggingIn
+import Firebase as F
 
-component :: forall m. H.Component HH.HTML QueryL Output m
-component = H.component { initialState, render, eval }
+type State = Boolean
+
+data QueryL a = Login a
+
+type Output = Void
+
+type Monad = F.FirebaseDSL
+
+ui :: H.Component HH.HTML QueryL Output Monad
+ui = H.component { initialState, render, eval }
   where
 
   initialState = true
@@ -25,8 +32,8 @@ component = H.component { initialState, render, eval }
       [ HH.text "Login with Google" ]
     ]
 
-  eval :: QueryL ~> H.ComponentDSL State QueryL Output m
+  eval :: QueryL ~> H.ComponentDSL State QueryL Output Monad
   eval = case _ of
     Login next -> do
-      H.raise LoggingIn
+      lift $ F.getFirebase >>= F.login
       pure next

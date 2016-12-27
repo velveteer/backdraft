@@ -14,7 +14,8 @@
     "purescript-foreign": "^3.0.1",
     "purescript-debug": "^2.0.0",
     "purescript-halogen": "168a5f71c0d57dcfc2be50400ffb2f49f1c3d811",
-    "purescript-aff-coroutines": "^4.0.0"
+    "purescript-aff-coroutines": "^4.0.0",
+    "purescript-foreign-generic": "^3.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^2.0.0"

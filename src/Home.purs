@@ -1,20 +1,28 @@
 module Home where
 
 import Prelude
+import Control.Monad.Trans.Class (lift)
+import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 
-type State = String
-data QueryH a = Logout a
-data Output = LoggingOut
+import Firebase as F
 
-component :: forall m. H.Component HH.HTML QueryH Output m
-component = H.component { initialState, render, eval }
+type State = Maybe F.Firebase
+
+type Monad = F.FirebaseDSL
+
+data QueryH a = Logout a
+
+type Output = Void
+
+ui :: H.Component HH.HTML QueryH Output Monad
+ui = H.component { initialState, render, eval }
   where
 
-  initialState = "Hello world"
+  initialState = Nothing
 
   render :: State -> H.ComponentHTML QueryH
   render _ = HH.div_
@@ -25,7 +33,7 @@ component = H.component { initialState, render, eval }
       [ HH.text "Logout" ]
     ]
 
-  eval :: QueryH ~> H.ComponentDSL State QueryH Output m
+  eval :: QueryH ~> H.ComponentDSL State QueryH Output Monad
   eval (Logout next) = do
-    H.raise LoggingOut
+    lift $ F.getFirebase >>= F.logout
     pure next
