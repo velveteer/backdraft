@@ -35,5 +35,5 @@ ui = H.component { initialState, render, eval }
   eval :: QueryL ~> H.ComponentDSL State QueryL Output Monad
   eval = case _ of
     Login next -> do
-      lift $ F.getFirebase >>= F.login
+      lift $ F.login
       pure next

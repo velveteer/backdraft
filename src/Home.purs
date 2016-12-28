@@ -35,5 +35,5 @@ ui = H.component { initialState, render, eval }
 
   eval :: QueryH ~> H.ComponentDSL State QueryH Output Monad
   eval (Logout next) = do
-    lift $ F.getFirebase >>= F.logout
+    lift $ F.logout
     pure next

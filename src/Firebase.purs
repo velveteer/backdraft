@@ -128,28 +128,28 @@ on r = makeAff (\eb cb -> onImpl r cb eb)
 
 data FirebaseDSLF a
   = Ask (Firebase -> a)
-  | Login Firebase a
-  | Logout Firebase a
+  | Login a
+  | Logout a
 
 type FirebaseDSL = Free FirebaseDSLF
 
 getFirebase :: FirebaseDSL Firebase
 getFirebase = liftF $ Ask id
 
-login :: Firebase -> FirebaseDSL Unit
-login fb = liftF $ Login fb unit
+login :: FirebaseDSL Unit
+login = liftF $ Login unit
 
-logout :: Firebase -> FirebaseDSL Unit
-logout fb = liftF $ Logout fb unit
+logout :: FirebaseDSL Unit
+logout = liftF $ Logout unit
 
 runFirebaseDSL :: forall eff. Firebase -> FirebaseDSL ~> Aff (firebase :: FIREBASE | eff)
 runFirebaseDSL = foldFree <<< runFirebaseDSLF
 
 runFirebaseDSLF :: forall eff. Firebase -> FirebaseDSLF ~> Aff (firebase :: FIREBASE | eff)
 runFirebaseDSLF fb (Ask a) = pure (a fb)
-runFirebaseDSLF _ (Login fb a) = do
+runFirebaseDSLF fb (Login a) = do
   liftEff $ signInWithPopup fb =<< googleAuthProvider
   pure a
-runFirebaseDSLF _ (Logout fb a) = do
+runFirebaseDSLF fb (Logout a) = do
   liftEff $ signOut fb
   pure a
