@@ -1,4 +1,4 @@
-module Home where
+module Backdraft.Home.UI where
 
 import Prelude
 import Control.Monad.Trans.Class (lift)
@@ -8,15 +8,15 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 
-import Firebase as F
+import Firebase.DSL (FirebaseDSL, logout)
 
-type State = Maybe F.Firebase
-
-type Monad = F.FirebaseDSL
+type State = Maybe String
 
 data QueryH a = Logout a
 
 type Output = Void
+
+type Monad = FirebaseDSL
 
 ui :: H.Component HH.HTML QueryH Output Monad
 ui = H.component { initialState, render, eval }
@@ -35,5 +35,5 @@ ui = H.component { initialState, render, eval }
 
   eval :: QueryH ~> H.ComponentDSL State QueryH Output Monad
   eval (Logout next) = do
-    lift $ F.logout
+    lift $ logout
     pure next
