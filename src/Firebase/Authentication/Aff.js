@@ -22,10 +22,21 @@ exports.onAuthStateChangedImpl = function (just) {
   };
 };
 
-exports.signInWithRedirect = function (app) {
+exports.signInWithRedirectImpl = function (app) {
   return function (provider) {
-    return function () {
-      app.auth().signInWithRedirect(provider);
+    return function (cb) {
+      return function (eb) {
+        return function () {
+          app.auth().signInWithRedirect(provider);
+          app.auth().getRedirectResult()
+            .then(function (result) {
+              return cb(result.user)();
+            })
+            .catch(function (err) {
+              return eb(err)();
+            });
+        };
+      };
     };
   };
 };

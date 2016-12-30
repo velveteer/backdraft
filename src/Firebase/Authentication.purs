@@ -11,12 +11,26 @@ import Firebase (Firebase, FIREBASE)
 
 foreign import data Provider :: * -- firebase.auth.AuthProvider
 
+data ProviderType
+  = Google
+  | Facebook
+  | Twitter
+  | Github
+
+data OAuthLoginType = Redirect | Popup
+
+getProvider :: forall eff. ProviderType -> Eff (firebase :: FIREBASE | eff) Provider
+getProvider Google = googleAuthProvider
+getProvider Facebook = facebookAuthProvider
+getProvider Twitter = twitterAuthProvider
+getProvider Github = githubAuthProvider
+
 -- TODO: Handle possible null values
--- TODO: Enumerate providers and add a constructor
 newtype User =
   User { displayName :: String
        , email :: String
        , photoURL :: String
+       , providerID :: String
        , uid :: String }
 
 derive instance genericUser :: Generic User _
@@ -31,4 +45,7 @@ foreign import currentUserImpl :: forall a eff. (a -> Maybe a) -> Maybe a -> Fir
 currentUser :: forall eff. Firebase -> Eff ( firebase :: FIREBASE | eff ) (Maybe String)
 currentUser fb = currentUserImpl Just Nothing fb
 
+foreign import facebookAuthProvider :: forall eff. Eff ( firebase :: FIREBASE | eff ) Provider
 foreign import googleAuthProvider :: forall eff. Eff ( firebase :: FIREBASE | eff ) Provider
+foreign import githubAuthProvider :: forall eff. Eff ( firebase :: FIREBASE | eff ) Provider
+foreign import twitterAuthProvider :: forall eff. Eff ( firebase :: FIREBASE | eff ) Provider

@@ -18,9 +18,8 @@ npm run watch
 
 ## Roadmap
 
-- [x] Authentication flow (only Google profile at the moment)
-- [ ] Authorization
+- [ ] Email auth flow
+- [x] OAuth flow
 - [ ] Database interaction
 - [ ] Routing
-- [ ] Global error handling
 - [ ] Better tooling

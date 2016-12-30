@@ -35,6 +35,17 @@ foreign import signInWithPopupImpl
 signInWithPopup :: forall eff. Firebase -> Provider -> Aff ( firebase :: FIREBASE | eff ) User
 signInWithPopup fb p = makeAff (\eb cb -> signInWithPopupImpl fb p cb eb)
 
+foreign import signInWithRedirectImpl
+  :: forall eff
+   . Firebase
+  -> Provider
+  -> (User -> Eff (firebase :: FIREBASE | eff) Unit)
+  -> (Error -> Eff (firebase :: FIREBASE | eff) Unit)
+  -> Eff ( firebase :: FIREBASE | eff ) Unit
+
+signInWithRedirect :: forall eff. Firebase -> Provider -> Aff ( firebase :: FIREBASE | eff ) User
+signInWithRedirect fb p = makeAff (\eb cb -> signInWithRedirectImpl fb p cb eb)
+
 foreign import signOutImpl
   :: forall eff
    . Firebase

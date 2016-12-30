@@ -14,7 +14,7 @@ import Firebase.DSL (FirebaseDSL, onAuthChange)
 import Backdraft.Login.UI as Login.UI
 import Backdraft.Home.UI as Home.UI
 
-data State = Authenticated | NotAuthenticated
+data State = Authenticated | NotAuthenticated | Loading
 
 data Query a = Init a
 
@@ -29,18 +29,20 @@ ui :: H.Component HH.HTML Query Output Monad
 ui = H.lifecycleParentComponent { initialState, render, eval, initializer, finalizer }
   where
 
-  initialState = NotAuthenticated
+  initialState = Loading
 
   -- Render Home screen if authenticated, otherwise render Login screen
   render :: State -> H.ParentHTML Query ChildQuery ChildSlot Monad
   render NotAuthenticated = HH.slot' CP.cp1 unit (defer \_ -> Login.UI.ui) absurd
   render Authenticated = HH.slot' CP.cp2 unit (defer \_ -> Home.UI.ui) absurd
+  render Loading = HH.div_ [ HH.text "Loading..." ]
 
   eval :: Query ~> H.ParentDSL State Query ChildQuery ChildSlot Output Monad
   eval = case _ of
 
     Init next -> do
       user <- lift $ onAuthChange
+      H.put Loading
       case user of
            Just _ -> H.put Authenticated
            Nothing -> H.put NotAuthenticated

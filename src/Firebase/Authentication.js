@@ -6,6 +6,18 @@ exports.googleAuthProvider = function () {
   return new auth.GoogleAuthProvider();
 };
 
+exports.twitterAuthProvider = function () {
+  return new auth.TwitterAuthProvider();
+};
+
+exports.githubAuthProvider = function () {
+  return new auth.GithubAuthProvider();
+};
+
+exports.facebookAuthProvider = function () {
+  return new auth.FacebookAuthProvider();
+};
+
 exports.currentUserImpl = function (just) {
   return function (nothing) {
     return function (app) {
