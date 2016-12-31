@@ -44,8 +44,8 @@ ui = H.lifecycleParentComponent { initialState, render, eval, initializer, final
       user <- lift $ onAuthChange
       H.put Loading
       case user of
-           Just _ -> H.put Authenticated
-           Nothing -> H.put NotAuthenticated
+        Just _ -> H.put Authenticated
+        Nothing -> H.put NotAuthenticated
       pure next
 
   initializer = Just $ H.action Init

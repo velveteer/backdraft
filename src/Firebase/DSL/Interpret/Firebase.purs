@@ -28,5 +28,5 @@ runFirebaseDSLF fb (Logout a) = do
   signOut fb
   pure a
 runFirebaseDSLF fb (OnAuthChange a) = do
-  user <- (onAuthStateChanged fb)
-  pure $ (a user)
+  user <- onAuthStateChanged fb
+  pure $ a user

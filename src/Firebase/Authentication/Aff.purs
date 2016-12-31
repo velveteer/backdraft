@@ -21,7 +21,6 @@ onAuthStateChanged
   :: forall eff
    . Firebase
   -> Aff ( firebase :: FIREBASE | eff ) (Maybe User)
-
 onAuthStateChanged fb = makeAff (\eb cb -> onAuthStateChangedImpl Just Nothing fb cb eb)
 
 foreign import signInWithPopupImpl
