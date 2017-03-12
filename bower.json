@@ -7,13 +7,13 @@
     "output"
   ],
   "dependencies": {
-    "purescript-prelude": "^2.1.0",
+    "purescript-prelude": "^2.4.0",
     "purescript-console": "^2.0.0",
     "purescript-eff": "^2.0.0",
     "purescript-maybe": "^2.0.1",
     "purescript-foreign": "^3.0.1",
     "purescript-debug": "^2.0.0",
-    "purescript-halogen": "168a5f71c0d57dcfc2be50400ffb2f49f1c3d811",
+    "purescript-halogen": "^1.1.0",
     "purescript-aff-coroutines": "^4.0.0",
     "purescript-foreign-generic": "^3.0.0",
     "purescript-freet": "^2.0.1",

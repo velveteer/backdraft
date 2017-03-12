@@ -7,7 +7,7 @@
     "watch": "pulp -w browserify --to dist/app.js"
   },
   "dependencies": {
-    "firebase": "^3.6.4"
+    "firebase": "^3.7.1"
   },
   "devDependencies": {}
 }

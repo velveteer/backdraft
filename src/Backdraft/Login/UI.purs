@@ -19,12 +19,19 @@ type State = { user :: Maybe User
 
 data QueryL a = Login ProviderType a
 
+type Input = Unit
+
 type Output = Void
 
 type Monad = FirebaseDSL
 
-ui :: H.Component HH.HTML QueryL Output Monad
-ui = H.component { initialState, render, eval }
+ui :: H.Component HH.HTML QueryL Input Output Monad
+ui = H.component
+  { initialState: const initialState
+  , render
+  , eval
+  , receiver: const Nothing
+  }
   where
 
   initialState = { user: Nothing, error: Nothing }

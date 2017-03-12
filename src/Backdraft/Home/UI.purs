@@ -14,12 +14,19 @@ type State = Maybe String
 
 data QueryH a = Logout a
 
+type Input = Unit
+
 type Output = Void
 
 type Monad = FirebaseDSL
 
-ui :: H.Component HH.HTML QueryH Output Monad
-ui = H.component { initialState, render, eval }
+ui :: H.Component HH.HTML QueryH Input Output Monad
+ui = H.component
+  { initialState: const initialState
+  , render
+  , eval
+  , receiver: const Nothing
+  }
   where
 
   initialState = Nothing

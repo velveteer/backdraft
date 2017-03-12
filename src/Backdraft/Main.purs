@@ -19,4 +19,4 @@ main = HA.runHalogenAff do
                         , storageBucket: "halogen-test.appspot.com" }
 
   fb <- liftEff $ app config
-  runUI (H.hoist (runFirebaseDSL fb) C.ui) =<< HA.awaitBody
+  runUI (H.hoist (runFirebaseDSL fb) C.ui) unit =<< HA.awaitBody
