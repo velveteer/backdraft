@@ -2,14 +2,14 @@ module Firebase.Authentication where
 
 import Prelude
 import Control.Monad.Eff (Eff())
-import Data.Foreign.Generic (readGeneric, defaultOptions)
-import Data.Foreign.Class (class IsForeign)
+import Data.Foreign.Generic (genericDecode, defaultOptions)
+import Data.Foreign.Class (class Decode)
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
 import Firebase (Firebase, FIREBASE)
 
-foreign import data Provider :: * -- firebase.auth.AuthProvider
+foreign import data Provider :: Type -- firebase.auth.AuthProvider
 
 data ProviderType
   = Google
@@ -38,8 +38,8 @@ derive instance genericUser :: Generic User _
 instance showUser :: Show User where
   show = genericShow
 
-instance isForeignUser :: IsForeign User where
-  read = readGeneric defaultOptions
+instance decodeUser :: Decode User where
+  decode = genericDecode defaultOptions
 
 foreign import currentUserImpl :: forall a eff. (a -> Maybe a) -> Maybe a -> Firebase -> Eff ( firebase :: FIREBASE | eff ) (Maybe String)
 currentUser :: forall eff. Firebase -> Eff ( firebase :: FIREBASE | eff ) (Maybe String)

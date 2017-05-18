@@ -7,19 +7,15 @@
     "output"
   ],
   "dependencies": {
-    "purescript-prelude": "^2.4.0",
-    "purescript-console": "^2.0.0",
-    "purescript-eff": "^2.0.0",
-    "purescript-maybe": "^2.0.1",
-    "purescript-foreign": "^3.0.1",
-    "purescript-debug": "^2.0.0",
-    "purescript-halogen": "^1.1.0",
-    "purescript-aff-coroutines": "^4.0.0",
-    "purescript-foreign-generic": "^3.0.0",
-    "purescript-freet": "^2.0.1",
-    "purescript-aff-free": "^3.0.0"
+    "purescript-prelude": "^3.0.0",
+    "purescript-console": "^3.0.0",
+    "purescript-foreign": "^4.0.0",
+    "purescript-halogen": "^2.0.1",
+    "purescript-aff-coroutines": "^5.0.0",
+    "purescript-foreign-generic": "^4.1.0",
+    "purescript-freet": "^3.0.0"
   },
   "devDependencies": {
-    "purescript-psci-support": "^2.0.0"
+    "purescript-psci-support": "^3.0.0"
   }
 }

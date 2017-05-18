@@ -14,15 +14,15 @@ module Firebase
 
 import Prelude
 import Control.Monad.Aff (Aff(), makeAff)
-import Control.Monad.Eff (Eff())
+import Control.Monad.Eff (Eff(), kind Effect)
 import Control.Monad.Eff.Exception (Error())
 
 -- Foreign data
-foreign import data FIREBASE      :: ! -- Eff
-foreign import data Firebase      :: * -- firebase.App
-foreign import data Database      :: * -- firebase.database.Database
-foreign import data Ref           :: * -- firebase.database.Reference
-foreign import data DataSnapshot  :: * -- firebase.database.DataSnapshot
+foreign import data FIREBASE      :: Effect -- Eff
+foreign import data Firebase      :: Type   -- firebase.App
+foreign import data Database      :: Type   -- firebase.database.Database
+foreign import data Ref           :: Type   -- firebase.database.Reference
+foreign import data DataSnapshot  :: Type   -- firebase.database.DataSnapshot
 
 -- Initialize
 foreign import app :: forall eff. FirebaseConfig -> Eff ( firebase :: FIREBASE | eff ) Firebase

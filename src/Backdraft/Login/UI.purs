@@ -5,7 +5,6 @@ import Control.Monad.Eff.Exception (message)
 import Control.Monad.Trans.Class (lift)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Debug.Trace (traceAnyA)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
@@ -58,5 +57,4 @@ ui = H.component
       case result of
         Left e -> H.put { user: Nothing, error: Just (message e) }
         Right u -> H.put { user: Just u, error: Nothing }
-      H.get >>= traceAnyA
       pure next
